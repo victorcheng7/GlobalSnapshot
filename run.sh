@@ -1,11 +1,9 @@
 #!/bin/bash
 function runTests {
-	let port_num=5001
 	for f in $1/*.in; do
 		filename=$(basename "$f")
 		filename="${filename%.*}"
-		./asg1 $port_num $f > $1/$filename.out &
-		port_num=$[port_num+1]
+		./asg2 $filename setup $f > $1/$filename.out &
 	done
 }
 
@@ -22,7 +20,7 @@ function runAllTests {
 	for d in ./tests/*; do
 		echo TESTCASE $num_test_cases:
 		runTests $d
-		while ps | grep -q asg1; do
+		while ps | grep -q asg2; do
 			sleep 1
 		done
 		checkOutputs $d

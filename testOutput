@@ -3,14 +3,17 @@
 import sys
 
 def extractOutput(file):
-	outputs = []
+	outputs = [] #All possible outputs
+	output = [] #A single possible output
 	with open(file, 'r') as f:
 		for line in f.readlines():
 			line = line.strip()
-			if line == 'or':
+			if line.lower() == 'or': #Finish the 1 of the possible results
+				outputs.append(output) 
+				output = []
 				continue
-			output = line.split()
-			outputs.append(output)
+			output.append(line)
+	outputs.append(output)
 	return outputs
 
 
@@ -20,13 +23,13 @@ def main():
 		exit(1)
 	exp_file = sys.argv[1]
 	out_file = sys.argv[2]
-	actual_output = extractOutput(out_file)[0]
+	actual_output = extractOutput(out_file)[0] #Get Actual output
 	expected_outputs = extractOutput(exp_file)
 	for expected_output in expected_outputs:
 		if actual_output == expected_output:
-			print "PASSED: " + exp_file
+			print "PASSED: " + exp_file #Match one of the possible outputs
 			return
-	print "FAILED: " + exp_file
+	print "FAILED: " + exp_file #Does not match any possible outputs
 
 if __name__ == "__main__":
 	main()
