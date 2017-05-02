@@ -1,9 +1,9 @@
 # Format of directory:
 ---
 
-> In here stays the different test suite we have for this project. 
-> Each test suite is a directory called test[i] where i is a unique id number (e.g. test1 test2 etc.).
-> The format of each test suite is provided below
+  In here stays the different test suite we have for this project. 
+  Each test suite is a directory called test[i] where i is a unique id number (e.g. test1 test2 etc.).
+  The format of each test suite is provided below
 
 ---
 # Format of the files in test suite:
