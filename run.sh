@@ -26,7 +26,7 @@ function runAllTests {
 	fi
 	echo TESTCASE $num_test_cases:
 	runTests $d
-	while ps | grep -q asg2; do
+	while ps | grep -q python; do
 	    sleep 1
 	done
 	checkOutputs $d
