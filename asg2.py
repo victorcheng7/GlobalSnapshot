@@ -26,12 +26,14 @@ def listenThread():
     sock.listen(10)
 
     while True:
+    store stream and addr in an array and loop through every time to see if there are incoming messages
         stream, addr = sock.accept()
         data = stream.recv(1024)
         q.put(int(data))
         stream.close()
     '''
 #CAUTION - Don't block. Check incoming communiation streams before/after processing every command
+#start sock.listen
 
 def process():
 #Read setup file. ex - setup.txt     
@@ -48,6 +50,7 @@ def process():
             connection_table.append((keyWords[0], keyWords[1]))
         elif(keyWords[0] == site_id):
             #CAUTION - Can you make multiple connections without it breaking, with the same variable?
+            #try catch/while true loop, and store it in an array. 
             sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             send_ip = int(connection_table[keyWords[1]-1][0])
             send_port = int(connection_table[keyWords[1]-1][1])
@@ -56,7 +59,7 @@ def process():
         num_line++;
 
     time.sleep(2)
-#TODO make a global listen to multiple incoming requests. sock.accept is blocking, so create your own TCP handler class
+#TODO make a global listen to multiple incoming requests. sock.accept is blocking, so create your own TCP handler class... 
 
 #Read command file. ex - site1.txt
     commandFileResult = open(command_file, "r")
