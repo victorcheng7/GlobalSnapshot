@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python
 
 import socket
 import time
@@ -117,7 +117,7 @@ class Site(object):
 			amount = int(keyWords[2])
 			self.sendMoney(dest_id, amount)
 		elif "snapshot" == keyWords[0]:
-			startSnapshot()
+			self.startSnapshot()
 		elif "sleep" == keyWords[0]:
 			time = float(keyWords[1])
 			self.sleep(time)
@@ -169,14 +169,16 @@ class Site(object):
 
 	def sendMoney(self, dest_id, amount):
 		msg = Message(self.id, None, amount)
-		outgoing_channels[dest_id].send(str(msg))
+		self.outgoing_channels[dest_id].send(str(msg))
 
 	def sendMarkers(self, snap_id):
 		msg = Message(self.id, snap_id, None, is_marker = True)
-		outgoing_channels[dest_id].send(str(msg))
+		for _, sock in enumerate(self.outgoing_channels):
+			sock.send(str(msg))
 
 	def startSnapshot(self):
 		self.snap_count += 1
+		counter = 0
 		snap_id = str(self.id) + "." + str(self.snap_count)
 		site_state = self.balance #Take Local State Snapshot
 		incoming_channels_states = copy.deepcopy(self.incoming_channels)
