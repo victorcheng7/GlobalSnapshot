@@ -253,38 +253,7 @@ def process():
 
         #CAUTION - close all the sockets that I opeend up there
         #output line by line, every snapshot. -(snapshot_id, local state, channel state ordered by site_id)
-    '''
-    clock = 0
-    t = threading.Thread(target=listenThread)
-    t.daemon = True
-    t.start()
 
-
-    
-    
-    f = open(file, "r")
-    fl = f.readlines()
-
-    for x in fl:
-        keyWord = x.split(' ')
-        if(keyWord[0] == "receive"):
-            temp_clock = q.get()
-            max_num = max(temp_clock, clock)
-            clock = max_num + 1
-        elif(keyWord[0] == "call"):
-            clock+=1
-            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            arr = x.split(' ')
-            ip = arr[1]
-            send_port = int(arr[2])
-            sock.connect((ip, send_port))
-            sock.sendall(str(clock))
-            sock.close()
-        else:
-            clock += 1
-        print(clock)
-        #output line by line, every snapshot. -(snapshot_id, local state, channel state ordered by site_id)
-        '''
     
 process()
 
