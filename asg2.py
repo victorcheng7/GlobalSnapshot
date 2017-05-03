@@ -5,6 +5,7 @@ import time
 import threading
 import sys
 import Queue
+import copy
 
 # argv accept input file, python asg2.py 1 setup.txt site1.txt
 def main():
@@ -48,7 +49,6 @@ def execute_commands(site, command_file):
 
 class Message(object):
 	MARKER = "M"
-    NO_SNAPSHOT = "0.0"
 	def __init__(self, source_id, snap_id, amount, is_marker = False):
 		self.source_id = source_id
         self.snap_id = snap_id
@@ -78,11 +78,13 @@ class Message(object):
 class Site(object):
 	def __init__(self, site_id):
 		self.id = site_id
+        self.snap_count = 0
 		self.balance = 10
         self.incoming_channels = {}
 		self.addr_book = []
 		self.outgoing_channels = {}
 		self.incomingChannel = None
+        self.snapID_table = {}
 
 	def openIncomingChannel(self, IP, port):
 		self.incomingChannel = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -91,7 +93,7 @@ class Site(object):
 		self.incomingChannel.listen(1)
 
 	def addOutgoingChannel(self, dest_id):
-		self.outgoing_channels.put(dest_id, None)
+		self.outgoing_channels[dest_id] = None
 
 	def openOutgoingChannels(self):
 		time.sleep(5) #To make sure all other processes are up
@@ -105,7 +107,7 @@ class Site(object):
                     time.sleep(1)
 
     def addIncomingChannel(self, source_id):
-        self.incoming_channels[source_id] = 0
+        self.incoming_channels[source_id] = [0, False]
 
     def execute(self, command):
 		self.checkIncomingMsgs()
@@ -132,19 +134,39 @@ class Site(object):
                 msg = con.recv(BUF_SIZE)
                 msg = Message.reconstructFromString(msg.strip())
                 if(msg.is_marker):
-                    if(msg.initiator_id == site_id)
-                        #increment counter++ 
-                        #if this counter == global counter, snapshot ends and print
-                        #source_id... log all future incoming messages as channel state
-                    else:
-                        #send this marker to all outgoing channels and your own site_id
-                else:
-                    #money transfer
+                    if msg.snap_id not in self.snapID_table: #First Marker -> input into snapID_table
+                        counter = 1
+                        site_state = self.balance
+                        incoming_channels_states = copy.deepcopy(self.incoming_channels)
+						self.snapID_table[msg.snap_id] = [counter, site_state, incoming_channels_states]
+                    else: #Not the first marker
+						self.snapID_table[msg.snap_id][0] += 1 #increase counter by 1
+						self.snapID_table[msg.snap_id][3][msg.source_id][0] = True #Take no more Snapshot on the channel
+						if self.snapID_table[msg.snap_id][0] == len(self.incoming_channels): #Received all markers
+							self.outputLocalSnapshotAt(msg.snap_id)
+                else: #received a msg
+                	self.balance += msg.amount #Fix the real-time balance
+                	for _, v in enumerate(self.snapID_table):
+                		if v[0] == len(self.incoming_channels): #Finished Snapshot
+                			continue
+                		if v[3][msg.source_id][0] == False: #The current money message is before Marker
+                			v[3][msg.source_id][1] += msg.amount #Record the increase in amount
             except Exception:
                 break
 
+    def outputLocalSnapshotAt(self, snap_id):
+    	output = snap_id + ": "
+    	output += str(self.snapID_table[snap_id][1]) + " "
+    	l = self.snapID_table[snap_id][2].items()
+    	sorted(l, key=lambda item: item[0])
+    	for _, val in l:
+    		output += str(val) + " "
+    	output = output.strip()
+    	print output
+    	del self.snapID_table[snap_id]
+
 	def sendMoney(self, dest_id, amount):
-		msg = Message(self.id, amount)
+		msg = Message(self.id, None, amount)
 		outgoing_channels[dest_id].send(str(msg))
 
 	def startSnapshot(self):
@@ -157,6 +179,6 @@ class Site(object):
 			time.sleep(0.2)
 			self.checkIncomingMsgs()
 			i += 1
-	
+
 if __name__ == "__main__":
 	main()
