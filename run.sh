@@ -3,7 +3,7 @@ function runTests {
     for f in $1/*.in; do
 	filename=$(basename "$f")
 	filename="${filename%.*}"
-	./asg2 $filename setup $f > $1/$filename.out &
+	./asg2 $filename $1/setup $f > $1/$filename.out &
     done
 }
 
@@ -11,7 +11,10 @@ function checkOutputs {
     for f in $1/*.exp; do
 	filename=$(basename "$f")
 	filename="${filename%.*}"
-	./testOutput $f $1/$filename.out
+	./testOutput $f $1/$filename.out > temp
+	if grep FAILED temp; then
+	    cat $1/$filename.out
+	fi
     done
 }
 
@@ -29,6 +32,7 @@ function runAllTests {
 	checkOutputs $d
 	num_test_cases=$[num_test_cases+1]
     done
+    rm temp
 }
 
 runAllTests
