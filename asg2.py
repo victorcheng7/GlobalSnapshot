@@ -47,6 +47,8 @@ def execute_commands(site, command_file):
 			command = command.lower().strip()
 			site.execute(command)
 
+    #FIRE done messages on all outgoing channels
+
 class Message(object):
 	MARKER = "M"
 	def __init__(self, source_id, snap_id, amount, is_marker = False):
@@ -81,7 +83,7 @@ class Site(object):
 		self.snap_count = 0
 		self.balance = 10
         self.con_incoming_channel = {} #key: site_id, value: con string 
-		self.incoming_channels = {}
+	    self.incoming_channels = {}
 		self.addr_book = []
 		self.outgoing_channels = {}
 		self.incomingChannel = None
@@ -131,6 +133,7 @@ class Site(object):
 		BUF_SIZE = 1024
 		while True:
 			try:
+                #TODO check incoming messages 
                 if msg.source_id not in con_incoming_channel: 
 				    con, addr = self.incomingChannel.accept()
                     con_incoming_channel[msg.source_id] = con
