@@ -3,7 +3,7 @@ function runTests {
     for f in $1/*.in; do
 	filename=$(basename "$f")
 	filename="${filename%.*}"
-	./asg2.debug $filename $1/setup $f > $1/$filename.debug &
+	./asg2_debug $filename $1/setup $f > $1/$filename.debug &
     done
 }
 
