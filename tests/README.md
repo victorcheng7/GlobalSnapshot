@@ -14,3 +14,5 @@
   	* If there are many possible result, separate them with a "or" preceding and following by a newline character ("\n")
   * output file: [x].out where x is a unique postive integer matching with the input file
     * This is where the program stdout on each process goes into.
+  * debug file: [x].debug where x is a unique positive integer matching with the input file
+    * This file is the debug log of each process. Used to understand how each process behave

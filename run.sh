@@ -13,7 +13,10 @@ function checkOutputs {
 	filename="${filename%.*}"
 	./testOutput $f $1/$filename.out > temp
 	if grep FAILED temp; then
-	    cat $1/$filename.out
+	    echo EXPECTED: `cat $f`
+	    echo OUTPUT: `cat $1/$filename.out`
+	else
+	    echo PASSED $f
 	fi
     done
 }
