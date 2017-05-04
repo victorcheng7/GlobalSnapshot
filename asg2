@@ -261,7 +261,6 @@ class Site(object):
 				con, _ = self.listeningSokcet.accept()
 				data = con.recv(BUF_SIZE)
 				msg = Message.reconstructFromString(Message.split(data.strip())[0])
-				print msg
 				if msg.type == Message.DONE_TYPE:
 					print "Received Done Message from " + str(msg.source_id)
 					self.done_count += 1
