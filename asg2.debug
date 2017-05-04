@@ -262,6 +262,7 @@ class Site(object):
 		return len(self.snapID_table)
 	
 	def TearDown(self):
+		print "Shutting Down!"
 		for _, sock in self.outgoing_channels.iteritems():
 			sock.close()
 		for sock in self.incoming_channels:
