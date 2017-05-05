@@ -123,7 +123,7 @@ class Site(object):
 		self.outgoing_channels[dest_id] = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 	def openOutgoingChannels(self):
-		time.sleep(5) #To make sure all other processes are up
+		#time.sleep(5) #To make sure all other processes are up
 		for dest_id, sock in self.outgoing_channels.iteritems():
 			while True:
 				try: 
