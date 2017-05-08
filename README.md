@@ -20,3 +20,11 @@ There are 2 files that will execute for you:
        * E.g: `./run_debug tests/test1/`
      * `./run_debug [test_suite_number]`: Run the test suite with the number specified and output the debug log of each site onto the screen (Behaved same as the above)
        * E.g: `./run_debug 1`
+
+---
+
+To run: 
+1) Create setup file and command file, then run this for every process
+./asg2 [site_id] [setup_file] [command_file]
+
+Author: Thien Hoang (7832413), Victor Cheng (3900552)
