@@ -48,8 +48,6 @@ def setup(site, setup_file):
 
 def execute_commands(site, command_file):
 	#Read command file. ex - site1.txt
-	if(random.randint(1,10) <= 5):
-		time.sleep(random.uniform(0, 1))
 	with open(command_file, 'r') as f:
 		for command in f.readlines():
 			command = command.lower().strip()
