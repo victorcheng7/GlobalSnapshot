@@ -3,7 +3,7 @@ function runTests {
     for f in $1/*.in; do
 	filename=$(basename "$f")
 	filename="${filename%.*}"
-	./asg2 $filename $1/setup $f > $1/$filename.out &
+	./asg2_3900552_7832413 $filename $1/setup $f > $1/$filename.out &
     done
 }
 
@@ -13,8 +13,10 @@ function checkOutputs {
 	filename="${filename%.*}"
 	./testOutput $f $1/$filename.out > temp
 	if grep FAILED temp; then
-	    echo EXPECTED: `cat $f`
-	    echo OUTPUT: `cat $1/$filename.out`
+	    echo EXPECTED: 
+	    cat $f
+	    echo OUTPUT: 
+	    cat $1/$filename.out
 	else
 	    echo PASSED $f
 	fi

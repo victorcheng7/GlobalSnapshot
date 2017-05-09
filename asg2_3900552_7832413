@@ -6,6 +6,7 @@ import threading
 import sys
 import Queue
 import copy
+import random
 
 # argv accept input file, python asg2.py 1 setup.txt site1.txt
 def main():
@@ -47,6 +48,8 @@ def setup(site, setup_file):
 
 def execute_commands(site, command_file):
 	#Read command file. ex - site1.txt
+	if(random.randint(1,10) <= 5):
+		time.sleep(random.uniform(0, 1))
 	with open(command_file, 'r') as f:
 		for command in f.readlines():
 			command = command.lower().strip()
@@ -117,7 +120,7 @@ class Site(object):
 		self.listeningSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 		self.listeningSocket.bind( (IP, port) )
 		self.listeningSocket.setblocking(0) 
-		self.listeningSocket.listen(1)
+		self.listeningSocket.listen(self.num_proc)
 
 	def addOutgoingChannel(self, dest_id):
 		self.outgoing_channels[dest_id] = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
